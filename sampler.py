@@ -305,9 +305,13 @@ class HierarchicalLDA(object):
 
             for w in word_counts:
                 count = word_counts[w]
-                for i in range(count):  # why ?????????
-                    new_topic_weights[level] += log((self.eta + i) / (self.eta_sum + total_tokens))
-                    total_tokens += 1
+                # for i in range(count):  # why ?????????
+                #     new_topic_weights[level] += log((self.eta + i) / (self.eta_sum + total_tokens))
+                #     total_tokens += 1
+                up_part = self.eta
+                down_part = self.eta_sum + total_tokens
+                new_topic_weights[level] += math.lgamma(up_part+count) - math.lgamma(up_part) - (math.lgamma(down_part+count) - math.lgamma(down_part)) # explained in calculate_word_likelihood_at_level
+                total_tokens += count
 
         self.calculate_word_likelihood(node_weights, self.root_node, 0.0, level_word_counts, new_topic_weights, 0)
 
@@ -317,16 +321,26 @@ class HierarchicalLDA(object):
         total_words = 0
         for w in word_counts:
             count = word_counts[w]
-            up_part = self.eta + node_word_count[w]
-            down_part = self.eta_sum + node_total_words + total_words
-            node_weight += math.lgamma(up_part+count) - math.lgamma(up_part) - (math.lgamma(down_part+count) - math.lgamma(down_part))
-            total_words += count
-
             # for i in range(count): # why ?????????
             #     node_weight += log( (self.eta + node_word_count[w] + i) /
             #                         (self.eta_sum + node_total_words  + total_words) )
             #     total_words += 1
-
+            #
+            # commented old calc method as the new one is faster, but less obvious:
+            # sum (i=0,n) (log( (up_part + i) / (down_part + i) ) ) = 
+            # = log (product (i=0,n) ((up_part + i) / (down_part + i)) = 
+            # = log (product (i=0,n) (up_part + i)) - log (product (i=0,n) (down_part + i))
+            # product of arithmetic progression is d^n * (Gamma(n+(a1/d))/Gamma(a1/d))
+            # here d = 1, n = count, a1 = up_part or down_part
+            # log(Gamma(n+a1)/Gamma(a1)) = log(Gamma(n+a1)) - log(Gamma(a1))
+            # so log (product (i=0,n) (up_part + i)) = log(Gamma(count+up_part)) - log(Gamma(up_part))
+            # and log (product (i=0,n) (down_part + i)) = log(Gamma(count+down_part)) - log(Gamma(down_part))
+            #
+            # as up_part and down_part are floats, we cannot replace log of gamma with log of factorial :(
+            up_part = self.eta + node_word_count[w]
+            down_part = self.eta_sum + node_total_words + total_words
+            node_weight += math.lgamma(up_part+count) - math.lgamma(up_part) - (math.lgamma(down_part+count) - math.lgamma(down_part))
+            total_words += count
         return node_weight
 
     def calculate_word_likelihood(self, node_weights, node, weight, level_word_counts, new_topic_weights, level):
@@ -344,16 +358,17 @@ class HierarchicalLDA(object):
         node_weights[node] += node_weight
 
 
-def get_weighted_random(self, weights):
-    total = weights.sum()
-    n = self.random_state.random()
-    n  *= total
-    for i, w in enumerate(weights):
-        if n <= w:
-            return i
-        else:
-            n -= w
-    return len(weights)-1
+    def get_weighted_random(self, weights):
+        total = weights.sum()
+        n = self.random_state.random()
+        n  *= total
+        for i, w in enumerate(weights):
+            if n <= w:
+                return i
+            else:
+                n -= w
+        return len(weights)-1 # exceptional case
+
 
     def sample_topics(self, d):
 
@@ -390,6 +405,7 @@ def get_weighted_random(self, weights):
                 level_weights[level] = (self.alpha + level_counts[level]) *                     \
                     (self.eta + path[level].word_counts[w]) /                                   \
                     (self.eta_sum + path[level].total_words)
+
             level_weights = level_weights / np.sum(level_weights)
             # level = self.random_state.multinomial(1, level_weights).argmax()
             level = self.get_weighted_random(level_weights)
@@ -436,3 +452,5 @@ def load_corpus(file_name):
                     doc.append(int(idx))
             corpus.append(doc)
         return corpus
+
+

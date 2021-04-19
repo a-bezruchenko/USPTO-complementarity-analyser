@@ -113,6 +113,7 @@ def preprocess(input_dir):
 def cluster_patents(corpus, vocab, n_samples, alpha, gamma, eta, num_levels, display_topics, words, with_weights):
     seed = 42
     hlda = HierarchicalLDA(corpus, vocab, alpha=alpha, gamma=gamma, eta=eta, num_levels=num_levels, seed=seed)
+    print("hlda initialized")
     hlda.estimate(n_samples, display_topics=display_topics, n_words=n_words, with_weights=with_weights)
     return hlda
 
