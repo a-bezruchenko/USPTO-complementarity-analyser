@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <title>Анализ</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'analyser/style.css' %}">
+    <script src="{% static 'analyser/jquery-2.2.2.min.js' %}"></script>
+    <script src="{% static 'analyser/plotly-latest.min.js' %}"></script>
+    <script src="{% static 'analyser/script.js' %}"></script>
+</head>
+<body>
+
+<header class="header">
+    <a href="../parser">Парсер</a>
+    <a href="../clusterer">Кластеризатор</a>
+    <a href="../analyser">Анализ</a>
+</header>
+
+<main>
+     <div class="d-flex justify-content-around">
+        <div class="results">
+            <p><b>Статус</b><br>
+            <input class="status_string" type="text" size="55" readonly="true">
+            <p>
+        </div>
+        <div class="start_analysing">
+            <p><b>Порог патентов:</b><br><input class="input_patent_threshold" type="number" size="40" value="5"></p>
+            <p>
+                <button class="btn btn-outline-primary" onclick="onAnalyseButtonClicked()">Запустить анализ</button>
+                <button class="btn btn-outline-primary" onclick="onResetButtonClicked()">Сбросить</button>
+            </p>
+            <p>
+                <!-- <button class="btn btn-outline-primary" onclick="onFirmTopicHeatmapButtonClicked()">Тепловая карта «Предприятия — темы»</button> -->
+                <!-- <button class="btn btn-outline-primary" onclick="onFirmTopicDistributionButtonClicked()">Распределение патентов по темам</button> -->
+                <button class="btn btn-outline-primary" onclick="onComplementarityHeatmapButtonClicked()">Тепловая карта взаимодополняемости</button>
+            </p>
+            <p>
+                <p> 
+                    <b>Название предприятия:</b><br>
+                    <div id = "input_firm_name_div"></div>
+                </p>
+                <!-- <input class="input_firm_name" type="text" size="40" value=""> -->
+
+                <button class="btn btn-outline-primary" onclick="onMostComplementaryFirmsButtonClicked()">Найти взаимодополняющие предприятия</button>
+            </p>
+            <div id = "image_place" height="75%" width="75%"></div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

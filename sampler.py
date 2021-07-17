@@ -1,5 +1,5 @@
 import csv
-from math import log
+from math import log, lgamma
 import sys
 import math
 
@@ -310,7 +310,7 @@ class HierarchicalLDA(object):
                 #     total_tokens += 1
                 up_part = self.eta
                 down_part = self.eta_sum + total_tokens
-                new_topic_weights[level] += math.lgamma(up_part+count) - math.lgamma(up_part) - (math.lgamma(down_part+count) - math.lgamma(down_part)) # explained in calculate_word_likelihood_at_level
+                new_topic_weights[level] += lgamma(up_part+count) - lgamma(up_part) - (lgamma(down_part+count) - lgamma(down_part)) # explained in calculate_word_likelihood_at_level
                 total_tokens += count
 
         self.calculate_word_likelihood(node_weights, self.root_node, 0.0, level_word_counts, new_topic_weights, 0)
@@ -335,11 +335,9 @@ class HierarchicalLDA(object):
             # log(Gamma(n+a1)/Gamma(a1)) = log(Gamma(n+a1)) - log(Gamma(a1))
             # so log (product (i=0,n) (up_part + i)) = log(Gamma(count+up_part)) - log(Gamma(up_part))
             # and log (product (i=0,n) (down_part + i)) = log(Gamma(count+down_part)) - log(Gamma(down_part))
-            #
-            # as up_part and down_part are floats, we cannot replace log of gamma with log of factorial :(
             up_part = self.eta + node_word_count[w]
             down_part = self.eta_sum + node_total_words + total_words
-            node_weight += math.lgamma(up_part+count) - math.lgamma(up_part) - (math.lgamma(down_part+count) - math.lgamma(down_part))
+            node_weight += lgamma(up_part+count) - lgamma(up_part) - (lgamma(down_part+count) - lgamma(down_part))
             total_words += count
         return node_weight
 

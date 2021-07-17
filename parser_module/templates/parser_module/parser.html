@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <title>Парсер</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'parser_module/style.css' %}">
+    <script src="{% static 'parser_module/jquery-2.2.2.min.js' %}"></script>
+    <script src="{% static 'parser_module/script.js' %}"></script>
+</head>
+<body>
+
+<header class="header">
+    <a href="../parser">Парсер</a>
+    <a href="../clusterer">Кластеризатор</a>
+    <a href="../analyser">Анализ</a>
+</header>
+
+<main>
+     <div class="d-flex justify-content-around">
+        <div class="results">
+            <p><b>Статус</b><br>
+            <input class="status_string" type="text" size="40" readonly="true">
+            <p>
+        </div>
+        <div class="start_parsing">
+            <p><b>Папка с исходными патентами:</b><br>
+            <input class="input_dirname" type="text" size="40" value="input_files">
+            <p>
+                <button class="btn btn-outline-primary" onclick="onParseButtonClicked()">Начать парсить патенты</button>
+                <button class="btn btn-outline-primary" onclick="onResetButtonClicked()">Сбросить</button>
+            </p>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

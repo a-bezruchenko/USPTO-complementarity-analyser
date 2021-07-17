@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <title>Кластеризатор</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'clusterer/style.css' %}">
+    <script src="{% static 'clusterer/jquery-2.2.2.min.js' %}"></script>
+    <script src="{% static 'clusterer/script.js' %}"></script>
+</head>
+<body>
+
+<header class="header">
+    <a href="../parser">Парсер</a>
+    <a href="../clusterer">Кластеризатор</a>
+    <a href="../analyser">Анализ</a>
+</header>
+
+<main>
+     <div class="d-flex justify-content-around">
+        <div class="results">
+            <p><b>Статус</b><br>
+            <input class="status_string" type="text" size="55" readonly="true">
+            <p>
+        </div>
+        <div class="start_cluster">
+            <p><b>Альфа:</b><br><input class="input_alpha" type="number" size="40" value="10.0"></p>
+            <p><b>Гамма:</b><br><input class="input_gamma" type="number" size="40" value="1.0"></p>
+            <p><b>Эта:</b><br><input class="input_eta" type="number" size="40" value="0.1"></p>
+            <p><b>Количество итераций:</b><br><input class="input_n" type="number" size="40" value="10"></p>
+            <p><b>Высота дерева:</b><br><input class="input_L" type="number" size="40" value="3"></p>
+            <p><b>Фильтр класса:</b><br><input class="input_filter" type="text" size="40" value="classification-ipcr H 01 L"></p>
+            <button class="btn btn-outline-primary" onclick="onClustererButtonClicked()">Начать кластеризовать патенты</button>
+            <button class="btn btn-outline-primary" onclick="onResetButtonClicked()">Сбросить</button>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

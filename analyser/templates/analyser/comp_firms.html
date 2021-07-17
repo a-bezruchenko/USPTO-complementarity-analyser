@@ -1,0 +1,12 @@
+<table border="1" width="75%" cellpadding="5">
+  <tr>
+    <th>Предприятие</th>
+    <th>Взаимодополняемость</th>
+  </tr>
+    {% for key, value in firms.items %}
+    <tr>
+     <th>{{ key }}</th>
+     <th>{{ value }}</th>
+    </tr>
+    {% endfor %}
+  </table>

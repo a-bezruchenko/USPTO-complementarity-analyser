@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <title>Analysing</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'analyser/style.css' %}">
+    <script src="{% static 'analyser/jquery-2.2.2.min.js' %}"></script>
+    <script src="{% static 'analyser/plotly-latest.min.js' %}"></script>
+    <script src="{% static 'analyser/script.js' %}"></script>
+</head>
+<body>
+
+<header class="header">
+    <a href="../parser">Parsing</a>
+    <a href="../clusterer">Clustering</a>
+    <a href="../analyser">Analysing</a>
+</header>
+
+<main>
+     <div class="d-flex justify-content-around">
+        <div class="results">
+            <p><b>Status</b><br>
+            <input class="status_string" type="text" size="40" readonly="true">
+            <p>
+        </div>
+        <div class="start_analysing">
+            <p><b>Patent number threshold:</b><br><input class="input_patent_threshold" type="number" size="40" value="5"></p>
+            <p>
+                <button class="btn btn-outline-primary" onclick="onAnalyseButtonClicked()">Run analysis</button>
+                <button class="btn btn-outline-primary" onclick="onResetButtonClicked()">Reset</button>
+            </p>
+            <p>
+                <!-- <button class="btn btn-outline-primary" onclick="onFirmTopicHeatmapButtonClicked()">Тепловая карта «Предприятия — темы»</button> -->
+                <!-- <button class="btn btn-outline-primary" onclick="onFirmTopicDistributionButtonClicked()">Распределение патентов по темам</button> -->
+                <button class="btn btn-outline-primary" onclick="onComplementarityHeatmapButtonClicked()">Complementarity heatmap</button>
+            </p>
+            <p>
+                <b>Firm name:</b><br>
+                <input class="input_firm_name" type="text" size="40" value="">
+                <button class="btn btn-outline-primary" onclick="onMostComplementaryFirmsButtonClicked()">Firm complementary firms</button>
+            </p>
+            <div id = "image_place" height="75%" width="75%"></div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>
